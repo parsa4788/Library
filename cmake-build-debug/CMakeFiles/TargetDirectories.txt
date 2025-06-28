@@ -1,0 +1,3 @@
+/home/parsa/Documents/program/Library/cmake-build-debug/CMakeFiles/Library.dir
+/home/parsa/Documents/program/Library/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/parsa/Documents/program/Library/cmake-build-debug/CMakeFiles/rebuild_cache.dir
