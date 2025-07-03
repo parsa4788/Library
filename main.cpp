@@ -43,6 +43,39 @@ bool valid_user_number(int num) {
         return true;
 }
 
+void sub_menu_search_books() {
+    Books b;
+    fstream x;
+    int choice;
+    while (true) {
+        cout << "1. Search by book name.\n";
+        cout << "2. Search by author name.\n";
+        cout << "3. Search by ISBN number.\n";
+        cout << "4. Search by book number.\n";
+        cout << "0. Exit.\n";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4 :
+                break;
+            case 0:
+                return;
+                break;
+            default:
+                cout << "Wrong choice!\nTry again.\n";
+                cin >> choice;
+                break;
+
+
+        }
+    }
+}
+
 void sub_menu_1() {
     Books b;
     fstream x;
@@ -252,6 +285,8 @@ int main() {
                 break;
             case '6':
                 sub_menu_6();
+                break;
+            case '7':
                 break;
             default:
                 cout << "Wrong choice!\n";

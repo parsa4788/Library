@@ -18,6 +18,8 @@ public:
 
     friend ostream &operator<<(ostream &out, Books &b);
 
+    void Serach_book(string filename);
+
 
 private:
     char name[31], authors[5][21], isbn[14];

@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <string.h>
+#include <string>
 
 using namespace std;
 
@@ -38,4 +39,8 @@ ostream &operator<<(ostream &out, Books &b) {
 
 void Books::set_book_number(long long number) {
     book_number = number;
+}
+void Books::Serach_book(string filename,string x) {
+
+
 }
