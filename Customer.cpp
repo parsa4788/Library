@@ -47,6 +47,7 @@ void Customer::Edit() {
         cout << "1. Name\n";
         cout << "2. Family name\n";
         cout << "3. Father name\n";
+        cout << " 4. Date of birth\n";
         cout << "0. EXit\n";
         cin >> choice;
         switch (choice) {
@@ -63,6 +64,10 @@ void Customer::Edit() {
             case 3:
                 cout << "Current: " << father << "\n Enter new:\n";
                 cin >> father;
+                break;
+            case 4:
+                cout << "Current: " << dob << "\nEnter new:\n";
+                cin >> dob;
                 break;
             default:
                 return;

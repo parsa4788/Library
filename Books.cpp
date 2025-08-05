@@ -25,6 +25,7 @@ istream &operator>>(istream &in, Books &b) {
     b.author_number = i - 1;
     cout << "Enter ISBN number:\n";
     in >> b.isbn;
+    b.remove = false;
     return in;
 }
 
@@ -33,14 +34,82 @@ ostream &operator<<(ostream &out, Books &b) {
     for (int i = 0; i < b.author_number; i++) {
         out << b.authors[i] << '\t';
     }
-    out << b.isbn << '\t' << b.book_number << '\t' << b.borrowed_number;
+    out << b.isbn << '\t' << b.book_number << '\t' << b.borrowed_number << "\t" << "author number: " << b.author_number;
     return out;
 }
 
 void Books::set_book_number(long long number) {
     book_number = number;
 }
-void Books::Serach_book(string filename,string x) {
 
+void Books::Search_book_name(string x, bool &check) {
+    string title = name;
+    if (title == x) {
+        check = false;
+        cout << *this << "\n";
+    }
+}
 
+void Books::Search_book_author(string x, bool &check) {
+    for (int i = 0; i < author_number; i++) {
+        string Author = authors[i];
+        if (Author == x) {
+            check = false;
+            cout << *this << "\n";
+            return;
+        }
+    }
+}
+
+void Books::Search_book_ISBN(string x, bool &check) {
+    if (isbn == x) {
+        check = false;
+        cout << *this << "\n";
+    }
+}
+
+bool Books::removed() {
+    return remove;
+}
+
+void Books::delete_book() {
+    remove = true;
+}
+
+void Books::Edit() {
+    int choice;
+    char c;
+    while (true) {
+        cout << "What do you want to edit?\n";
+        cout << "1. Title.\n";
+        cout << "2. Author.\n";
+        cout << "3. ISBN number.\n";
+        cout << "0. Exit.\n";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                cout << "Current: " << name << "\nEnter new:\n";
+                cin >> name;
+                break;
+            case 2:
+                for (int i = 0; i < author_number; i++) {
+                    cout << "Current: " << authors[i] << "\nDo you want to edit this author? [Y/N]\n";
+                    cin >> c;
+                    if (c == 'y' || c == 'Y') {
+                        cout << "Enter new:\n";
+                        cin.ignore();
+                        cin.get(authors[i], 20);
+                    } else
+                        return;
+                }
+                break;
+            case 3:
+                cout << "Current: " << isbn << "\nEnter new:\n";
+                cin >> isbn;
+                break;
+            case 0:
+                return;
+
+        }
+    }
 }

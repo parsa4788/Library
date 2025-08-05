@@ -18,12 +18,22 @@ public:
 
     friend ostream &operator<<(ostream &out, Books &b);
 
-    void Serach_book(string filename);
+    void Search_book_name(string x, bool &b);
 
+    void Search_book_author(string x, bool &b);
+
+    void Search_book_ISBN(string isbn, bool &b);
+
+    bool removed();
+
+    void delete_book();
+
+    void Edit();
 
 private:
     char name[31], authors[5][21], isbn[14];
     int author_number, book_number, borrowed_number;
+    bool remove;
 
 };
 
