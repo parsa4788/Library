@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string.h>
 #include <string>
+#include"Customer.h"
 
 using namespace std;
 
@@ -26,6 +27,8 @@ istream &operator>>(istream &in, Books &b) {
     cout << "Enter ISBN number:\n";
     in >> b.isbn;
     b.remove = false;
+    b.lend = false;
+    b.reserve = false;
     return in;
 }
 
@@ -112,4 +115,10 @@ void Books::Edit() {
 
         }
     }
+}
+
+void Books::Lend(Customer cu) {
+    member = cu;
+    lend = true;
+    borrowed_number++;
 }

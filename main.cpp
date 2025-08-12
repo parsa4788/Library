@@ -5,6 +5,7 @@
 #include "Customer.h"
 #include <string>
 #include <fstream>
+#include "LibraryManager.h"
 
 using namespace std;
 
@@ -417,8 +418,29 @@ void sub_menu_5() {
 }
 
 void sub_menu_6() {
-    int choice;
+    int choice, num;
+    size_t pos;
+    Customer customer;
+    Books book;
+    fstream f;
+    LibraryManager l;
     while (true) {
+        cout << "Enter member's membership number:\n";
+        cin >> num;
+        if (!valid_user_number(num)) {
+            cout << "Invalid membership number.\n";
+            return;
+        }
+        f.open("Customer.dat", ios::binary | ios::in);
+        if (!f.is_open()) {
+            cout << "Error opening file.\n";
+            return;
+        }
+        pos = (num - 18937648) * sizeof(Customer);
+        f.seekp(pos, ios::beg);
+        f.read((char *) &customer, sizeof(Customer));
+        f.close();
+        cout << customer << endl;
         cout << "1. Lend\n";
         cout << "2. Get back\n";
         cout << "3. Reserve\n";
@@ -428,6 +450,34 @@ void sub_menu_6() {
             case 0:
                 return;
             case 1:
+                cout << "Enter book number:\n";
+                cin >> num;
+                if (!valid_book_num(num)) {
+                    cout << "Invalid book number.\n";
+                    return;
+                }
+                f.open("MyBooks.dat", ios::binary | ios::in | ios::out);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                pos = (num - 4041234) * sizeof(Books);
+                f.seekp(pos, ios::beg);
+                f.read((char *) &book, sizeof(Books));
+                cout << book << endl;
+                book.Lend(customer);
+                f.seekp(pos, ios::beg);
+                f.write((char *) &book, sizeof(Books));
+                f.close();
+                f.open("LibraryManager.dat", ios::out | ios::binary | ios::app);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                l.Lend_save(book, customer);
+                f.write((char *) &l, sizeof(LibraryManager));
+                f.close();
+                cout << "Book lending completed.\n";
                 break;
             case 2:
                 break;
@@ -435,6 +485,32 @@ void sub_menu_6() {
                 break;
             default:
                 return;
+        }
+    }
+}
+
+void sub_menu_7() {
+    int choice;
+    while (true) {
+        cout << "1. Books with late return.\n";
+        cout << "2. Popular books.\n";
+        cout << "3. Active members.\n";
+        cout << "4. transactions.\n";
+        cout << "0. EXit\n";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 0:
+                break;
+            default:
+                cout << "Wrong choice.\n";
         }
     }
 }

@@ -10,14 +10,12 @@
 using namespace std;
 
 #include "Date.h"
-#include "Books.h"
 
 class Customer {
 private:
     char name[21], family[21], father[21];
     Date dob;
     int user_num, borrow_num;
-    Books borrowed[10];
     bool removed;
 public:
     Customer();
