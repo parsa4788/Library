@@ -9,7 +9,7 @@
 
 #include "Date.h"
 
-#include "Customer.h"1
+#include "Customer.h"
 
 class Customer;
 
@@ -37,6 +37,8 @@ public:
     void Edit();
 
     void Lend(Customer cu);
+
+    bool is_lended();
 
 private:
     char name[31], authors[5][21], isbn[14];

@@ -121,4 +121,9 @@ void Books::Lend(Customer cu) {
     member = cu;
     lend = true;
     borrowed_number++;
+    return;
+}
+
+bool Books::is_lended() {
+    return lend;
 }

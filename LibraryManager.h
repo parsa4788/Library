@@ -24,7 +24,7 @@ private:
 public:
     friend ostream &operator<<(ostream &out, LibraryManager &x);
 
-    void Lend_save(Books b,Customer c);
+    void Lend_save(Books b,Customer c,Date d);
 
 };
 

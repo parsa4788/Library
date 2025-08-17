@@ -10,4 +10,6 @@ add_executable(Library
         Books.cpp
         Books.h
         Customer.cpp
-        Customer.h)
+        Customer.h
+        LibraryManager.cpp
+        LibraryManager.h)
