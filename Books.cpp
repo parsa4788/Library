@@ -117,8 +117,7 @@ void Books::Edit() {
     }
 }
 
-void Books::Lend(Customer cu) {
-    member = cu;
+void Books::Lend() {
     lend = true;
     borrowed_number++;
     return;
@@ -126,4 +125,12 @@ void Books::Lend(Customer cu) {
 
 bool Books::is_lended() {
     return lend;
+}
+
+int Books::get_booknum() {
+    return book_number;
+}
+
+void Books::get_back() {
+    lend = false;
 }

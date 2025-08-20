@@ -19,12 +19,20 @@ class LibraryManager {
 private:
     Customer customer;
     Books book;
-    Date return_date,now;
-    bool operation;
+    Date return_date;
+    bool lended, reserve, get_back;
 public:
+    LibraryManager();
+
     friend ostream &operator<<(ostream &out, LibraryManager &x);
 
-    void Lend_save(Books b,Customer c,Date d);
+    void Lend_save(Books b, Customer c, Date d);
+
+    void Get_back();
+
+    bool check_lending(Customer c, Books b);
+
+    bool late_return();
 
 };
 

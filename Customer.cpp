@@ -40,6 +40,10 @@ bool Customer::check_user_num() {
     return removed;
 }
 
+int Customer::get_usrnum() {
+    return user_num;
+}
+
 void Customer::Edit() {
     int choice;
     while (true) {

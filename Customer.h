@@ -19,6 +19,7 @@ private:
     bool removed;
 public:
     Customer();
+
     friend istream &operator>>(istream &in, Customer &c);
 
     friend ostream &operator<<(ostream &out, Customer &c);
@@ -30,6 +31,8 @@ public:
     bool check_user_num();
 
     void Edit();
+
+    int get_usrnum();
 
 };
 

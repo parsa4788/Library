@@ -36,15 +36,18 @@ public:
 
     void Edit();
 
-    void Lend(Customer cu);
+    void Lend();
+
+    void get_back();
 
     bool is_lended();
+
+    int get_booknum();
 
 private:
     char name[31], authors[5][21], isbn[14];
     int author_number, book_number, borrowed_number;
     bool remove, reserve, lend;
-    Customer member;
 
 };
 
