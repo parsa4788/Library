@@ -10,6 +10,14 @@ using namespace std;
 
 #include "Books.h"
 
+Books::Books() {
+    lend = false;
+    reserve = false;
+    borrowed_number = 0;
+    author_number = 0;
+    remove = false;
+}
+
 istream &operator>>(istream &in, Books &b) {
     int i;
     cout << "Enter name of the book:\n";
@@ -133,4 +141,12 @@ int Books::get_booknum() {
 
 void Books::get_back() {
     lend = false;
+}
+
+void Books::book_reserve() {
+    reserve = true;
+}
+
+int Books::get_borrow_num() {
+    return borrowed_number;
 }

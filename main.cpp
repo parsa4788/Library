@@ -316,6 +316,7 @@ void sub_menu_3() {
     }
 }
 
+
 void sub_menu_5() {
     Customer customer;
     fstream f;
@@ -492,10 +493,10 @@ void sub_menu_6() {
                 cout << book << endl;
                 cout << "Please enter return date.\n";
                 cin >> d;
-                /*while (d < now) {
+                while (d < now) {
                     cout << "The return date is incorrect. Please try again.\n";
                     cin >> d;
-                }*/
+                }
                 book.Lend();
                 f.seekp(pos, ios::beg);
                 f.write((char *) &book, sizeof(Books));
@@ -577,6 +578,53 @@ void sub_menu_6() {
                 f.close();
                 break;
             case 3:
+                cout << "Enter member's membership number:\n";
+                cin >> num;
+                if (!valid_user_number(num)) {
+                    cout << "Invalid membership number.\n";
+                    return;
+                }
+                f.open("Customer.dat", ios::binary | ios::in);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                pos = (num - 18937648) * sizeof(Customer);
+                f.seekp(pos, ios::beg);
+                f.read((char *) &customer, sizeof(Customer));
+                f.close();
+                cout << customer << endl;
+                cout << "Enter book number:\n";
+                cin >> num;
+                if (!valid_book_num(num)) {
+                    cout << "Invalid book number.\n";
+                    return;
+                }
+                f.open("MyBooks.dat", ios::binary | ios::in | ios::out);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                pos = (num - 4041234) * sizeof(Books);
+                f.seekp(pos, ios::beg);
+                f.read((char *) &book, sizeof(Books));
+                if (!book.is_lended()) {
+                    cout << "This book isn't lended and cannot be reserved.\n";
+                    return;
+                }
+                book.book_reserve();
+                f.seekp(pos, ios::beg);
+                f.write((char *) &book, sizeof(Books));
+                f.close();
+                f.open("LibraryManager.dat", ios::binary | ios::app);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                l.reserve_save(book, customer);
+                f.write((char *) &l, sizeof(l));
+                f.close();
+                cout << "Reserving completed successfully.\n";
                 break;
             default:
                 return;
@@ -585,9 +633,10 @@ void sub_menu_6() {
 }
 
 void sub_menu_7() {
-    int choice;
+    int choice, avrg = 0;
     fstream f;
     LibraryManager l;
+    Books book;
     while (true) {
         cout << "1. Books with late return.\n";
         cout << "2. Popular books.\n";
@@ -611,6 +660,26 @@ void sub_menu_7() {
                 cout << "------------------------" << endl;
                 break;
             case 2:
+                f.open("MyBooks.dat", ios::in | ios::binary);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                f.read((char *) &book, sizeof(Books));
+                while (!f.eof()) {
+                    avrg += book.get_borrow_num();
+                    f.read((char *) &book, sizeof(Books));
+                }
+                avrg /= file_size("MyBooks.dat") / sizeof(Books);
+                f.seekp(0, ios::beg);
+                f.read((char *) &book, sizeof(Books));
+                while (!f.eof()) {
+                    if (book.get_borrow_num() > avrg) {
+                        cout << book << endl;
+                    }
+                    f.read((char *) &book, sizeof(Books));
+                }
+                f.close();
                 break;
             case 3:
                 break;
@@ -638,7 +707,7 @@ void sub_menu_7() {
 void Admin_menu() {
     char choice;
     Books book;
-    fstream x;
+    fstream f;
     while (true) {
         cout << "1. Show/look for books in library.\n";
         cout << "2. Add new book.\n";
@@ -657,20 +726,33 @@ void Admin_menu() {
                 break;
             case '2':
                 cin >> book;
-                x.open("MyBooks.dat", ios::app | ios::binary);
-                if (!x.is_open()) {
+                f.open("MyBooks.dat", ios::app | ios::binary);
+                if (!f.is_open()) {
                     cout << "Error opening file.\n";
                     return;
                 }
                 book.set_book_number((file_size("MyBooks.dat") / sizeof(Books)) + 4041234);
-                x.write((char *) &book, sizeof(Books));
-                x.close();
+                f.write((char *) &book, sizeof(Books));
+                f.close();
                 cout << "New book added.\n";
                 break;
             case '3':
                 sub_menu_3();
                 break;
             case '4':
+                f.open("MyBooks.dat", ios::in | ios::binary);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                f.read((char *) &book, sizeof(Books));
+                while (!f.eof()) {
+                    if (book.is_lended())
+                        cout << book << endl;
+                    f.read((char *) &book, sizeof(Books));
+                }
+                f.close();
+                cout << "----------------\n";
                 break;
             case '5':
                 sub_menu_5();

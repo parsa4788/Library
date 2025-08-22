@@ -64,3 +64,12 @@ bool LibraryManager::late_return() {
     else
         return false;
 }
+
+void LibraryManager::reserve_save(Books b, Customer c) {
+    Date d;
+    return_date = d;
+    reserve = true;
+    lended = false;
+    book = b;
+    customer = c;
+}

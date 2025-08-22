@@ -17,6 +17,7 @@ using namespace std;
 
 class Books {
 public:
+    Books();
 
     void set_book_number(long long number);
 
@@ -43,6 +44,10 @@ public:
     bool is_lended();
 
     int get_booknum();
+
+    void book_reserve();
+
+    int get_borrow_num();
 
 private:
     char name[31], authors[5][21], isbn[14];
