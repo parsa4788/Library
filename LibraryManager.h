@@ -34,7 +34,9 @@ public:
 
     bool late_return();
 
-    void reserve_save(Books b,Customer c);
+    void reserve_save(Books b, Customer c);
+
+    void print_user_transaction(Customer c);
 
 };
 

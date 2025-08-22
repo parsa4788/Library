@@ -73,3 +73,9 @@ void LibraryManager::reserve_save(Books b, Customer c) {
     book = b;
     customer = c;
 }
+
+void LibraryManager::print_user_transaction(Customer c) {
+    if (c.get_usrnum() == this->customer.get_usrnum() && lended) {
+        cout << this << endl;
+    }
+}

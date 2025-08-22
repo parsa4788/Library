@@ -733,7 +733,8 @@ void sub_menu_7() {
 }
 
 void Admin_menu() {
-    char choice;
+    bool check;
+    char choice, c;
     Books book;
     fstream f;
     while (true) {
@@ -744,11 +745,23 @@ void Admin_menu() {
         cout << "5. Add / Delete / Edit member:\n";
         cout << "6. Bookkeeping.\n";
         cout << "7. Reports.\n";
-        cout << "0. Exit.\n";
+        cout << "0. Log out.\n";
         cin >> choice;
         switch (choice) {
             case '0':
-                return;
+                check = true;
+                while (check) {
+                    cout << "Are you sure you want to log out? [Y/N]\n";
+                    cin >> c;
+                    if (c == 'Y' || c == 'y')
+                        return;
+                    else if (c == 'N' || c == 'n')
+                        check = false;
+                    else {
+                        cout << "Wrong choice!\nPlease try again\n";
+                    }
+                }
+                break;
             case '1':
                 sub_menu_1();
                 break;
@@ -802,6 +815,9 @@ void Admin_menu() {
 }
 
 void Member_menu() {
+    Books book;
+    Date d, now;
+    LibraryManager l;
     bool check;
     size_t pos;
     fstream f;
@@ -840,22 +856,101 @@ void Member_menu() {
         cout << "2. Get book.\n";
         cout << "3. Tamdid.\n";
         cout << "4. Show loaned books.\n";
-        cout << "5. Show list of loaned books.\n";
+        cout << "5. Show your loaned books.\n";
         cout << "6. Reserve book.\n";
         cout << "0. Log out.\n";
         cin >> choice;
         switch (choice) {
             case 1:
+                sub_menu_search_books();
                 break;
             case 2:
+                cout << "Enter book number:\n";
+                cin >> num;
+                if (!valid_book_num(num)) {
+                    cout << "Invalid book number.\n";
+                    return;
+                }
+                f.open("MyBooks.dat", ios::binary | ios::in | ios::out);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                pos = (num - 4041234) * sizeof(Books);
+                f.seekp(pos, ios::beg);
+                f.read((char *) &book, sizeof(Books));
+                if (book.is_lended()) {
+                    cout << book << endl;
+                    cout << "This book is already lended.\n";
+                    return;
+                }
+                cout << book << endl;
+                cout << "Please enter return date.\n";
+                cin >> d;
+                while (d < now) {
+                    cout << "The return date is incorrect. Please try again.\n";
+                    cin >> d;
+                }
+                book.Lend();
+                f.seekp(pos, ios::beg);
+                f.write((char *) &book, sizeof(Books));
+                f.close();
+                f.open("LibraryManager.dat", ios::out | ios::binary | ios::app);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                l.Lend_save(book, customer, d);
+                f.write((char *) &l, sizeof(LibraryManager));
+                f.close();
+                cout << "Book lending completed.\n";
                 break;
             case 3:
                 break;
             case 4:
                 break;
             case 5:
+                f.open("LibraryManager.dat", ios::in | ios::binary);
+                f.read((char *) &l, sizeof(l));
+                while (!f.eof()) {
+                    l.print_user_transaction(customer);
+                    f.read((char *) &l, sizeof(l));
+                }
+                f.close();
+                cout << "------------------------\n";
                 break;
             case 6:
+                cout << "Enter book number:\n";
+                cin >> num;
+                if (!valid_book_num(num)) {
+                    cout << "Invalid book number.\n";
+                    return;
+                }
+                f.open("MyBooks.dat", ios::binary | ios::in | ios::out);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                pos = (num - 4041234) * sizeof(Books);
+                f.seekp(pos, ios::beg);
+                f.read((char *) &book, sizeof(Books));
+                if (!book.is_lended()) {
+                    cout << "This book isn't lended and cannot be reserved.\n";
+                    return;
+                }
+                book.book_reserve();
+                f.seekp(pos, ios::beg);
+                f.write((char *) &book, sizeof(Books));
+                f.close();
+                f.open("LibraryManager.dat", ios::binary | ios::app);
+                if (!f.is_open()) {
+                    cout << "Error opening file.\n";
+                    return;
+                }
+                l.reserve_save(book, customer);
+                f.write((char *) &l, sizeof(l));
+                f.close();
+                cout << "Reserving completed successfully.\n";
                 break;
             case 0:
                 check = true;
