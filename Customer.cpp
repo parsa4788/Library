@@ -20,11 +20,14 @@ istream &operator>>(istream &in, Customer &c) {
     in >> c.father;
     cout << "Enter date of birth:\n";
     cin >> c.dob;
+    cout << "Enter phone number:\n";
+    cin >> c.Phone_number;
     return in;
 }
 
 ostream &operator<<(ostream &out, Customer &c) {
-    out << c.name << ' ' << c.family << '\t' << c.father << '\t' << c.dob << '\t' << c.user_num << endl;
+    out << c.name << ' ' << c.family << '\t' << c.father << '\t' << c.dob << '\t' << c.user_num << '\t'
+        << c.Phone_number << endl;
     return out;
 }
 
@@ -79,4 +82,11 @@ void Customer::Edit() {
         }
     }
 
+}
+
+bool Customer::check_pass(char pass[12]) {
+    if (strcmp(pass, Phone_number) == 0)
+        return true;
+    else
+        return false;
 }

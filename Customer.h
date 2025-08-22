@@ -13,7 +13,7 @@ using namespace std;
 
 class Customer {
 private:
-    char name[21], family[21], father[21];
+    char name[21], family[21], father[21], Phone_number[12];
     Date dob;
     int user_num, borrow_num;
     bool removed;
@@ -33,6 +33,8 @@ public:
     void Edit();
 
     int get_usrnum();
+
+    bool check_pass(char p[12]);
 
 };
 

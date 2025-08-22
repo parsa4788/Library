@@ -23,6 +23,7 @@ long long file_size(const string &filename) {
     return x;
 }
 
+
 bool valid_user_number(int num) {
     Customer c;
     long int p = (num - 18937648) * sizeof(Customer);
@@ -64,6 +65,32 @@ bool valid_book_num(int number) {
     if (number < 4041234 || number >= max)
         return false;
     return true;
+}
+
+bool user_get_through(int num, char pass[12]) {
+    Customer customer;
+    size_t pos;
+    fstream f;
+    if (!valid_user_number(num)) {
+        cout << "Invalid username.Please try again.\n";
+        return false;
+    }
+    pos = (num - 18937648) * sizeof(Customer);
+    f.open("Customer.dat", ios::in | ios::binary);
+    if (!f.is_open()) {
+        cout << "Error opening file.\n";
+        return false;
+    }
+    f.seekp(pos, ios::beg);
+    f.read((char *) &customer, sizeof(Customer));
+    if (!customer.check_pass(pass)) {
+        cout << "Password and username do not match.\n";
+        return false;
+    } else {
+        cout << "Your Successfully logged in.\n";
+        return true;
+    }
+
 }
 
 bool check_lended_book(Customer c, Books b) {
@@ -258,7 +285,7 @@ void sub_menu_3() {
                             check = false;
                         else if (c == 'N' || c == 'n') {
                             f.close();
-                            sub_menu_3();
+                            return;
                         } else {
                             f.close();
                             cout << "Wrong choice!\nPlease try again\n";
@@ -341,6 +368,7 @@ void sub_menu_5() {
                     return;
                 }
                 customer.set_user_num((file_size("Customer.dat") / sizeof(Customer) + 18937648));
+                cout << "The user number is: " << (file_size("Customer.dat") / sizeof(Customer) + 18937648) << endl;
                 f.write((char *) &customer, sizeof(Customer));
                 f.close();
                 cout << "New member added.\n";
@@ -774,7 +802,39 @@ void Admin_menu() {
 }
 
 void Member_menu() {
-    int choice;
+    bool check;
+    size_t pos;
+    fstream f;
+    int num, i = 0, choice;
+    char pass[12], c;
+    Customer customer;
+    cout
+            << "Please Enter username and password.\n(Username is your library usernumber & password is your phone number.)\n";
+    cout << "Please enter your username:\n";
+    cin >> num;
+    cout << "Please enter your password:\n";
+    cin >> pass;
+    while (!user_get_through(num, pass) && i < 3) {
+
+        cout << "Please enter your username:\n";
+        cin >> num;
+        cout << "Please enter your password:\n";
+        cin >> pass;
+        i++;
+    }
+    if (i == 3) {
+        cout << "Too any attempts.PLease try again later.\n";
+        return;
+    }
+    f.open("Customer.dat", ios::in | ios::binary);
+    if (!f.is_open()) {
+        cout << "Error opening file.\n";
+        return;
+    }
+    pos = (num - 18937648) * sizeof(Customer);
+    f.seekp(pos, ios::beg);
+    f.read((char *) &customer, sizeof(Customer));
+    f.close();
     while (true) {
         cout << "1. Search books.\n";
         cout << "2. Get book.\n";
@@ -782,7 +842,7 @@ void Member_menu() {
         cout << "4. Show loaned books.\n";
         cout << "5. Show list of loaned books.\n";
         cout << "6. Reserve book.\n";
-        cout << "0. Exit.\n";
+        cout << "0. Log out.\n";
         cin >> choice;
         switch (choice) {
             case 1:
@@ -798,7 +858,19 @@ void Member_menu() {
             case 6:
                 break;
             case 0:
-                return;
+                check = true;
+                while (check) {
+                    cout << "Are you sure you want to log out? [Y/N]\n";
+                    cin >> c;
+                    if (c == 'Y' || c == 'y')
+                        return;
+                    else if (c == 'N' || c == 'n')
+                        check = false;
+                    else {
+                        cout << "Wrong choice!\nPlease try again\n";
+                    }
+                }
+                break;
             default:
                 cout << "Wrong choice!\nPlease try again.\n";
         }
@@ -806,10 +878,6 @@ void Member_menu() {
 }
 
 int main() {
-    /* Date d1, d2;
-     cin >> d2;
-     cout << d1 - d2<<endl;
-     return 0;*/
     int choice;
     while (true) {
         cout << "1. Admin\n";
