@@ -19,7 +19,7 @@ class LibraryManager {
 private:
     Customer customer;
     Books book;
-    Date return_date;
+    Date return_date, got_back;
     bool lended, reserve, get_back;
 public:
     LibraryManager();
@@ -37,6 +37,8 @@ public:
     void reserve_save(Books b, Customer c);
 
     void print_user_transaction(Customer c);
+
+    void print_user_current_transaction(Customer c);
 
 };
 

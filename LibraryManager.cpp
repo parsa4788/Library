@@ -17,15 +17,16 @@ LibraryManager::LibraryManager() {
 
 ostream &operator<<(ostream &out, LibraryManager &x) {
     Date now;
-    if (x.lended) {
+    if (x.lended && x.get_back) {
+        cout << "------------------------\nLending\n";
+        cout << x.customer << "\n" << x.book << "\n" << "return date: " << x.return_date << endl;
+        cout << "Was returned in: " << x.got_back;
+    } else if (x.lended) {
         cout << "------------------------\nLending\n";
         cout << x.customer << "\n" << x.book << "\n" << "return date: " << x.return_date;
     } else if (x.reserve) {
         cout << "------------------------\nReserving\n";
         cout << x.customer << "\n" << x.book << "\n" << now;
-    } else if (x.get_back) {
-        cout << "\n------------------------\nGetting back\n";
-        cout << x.customer << "\n" << x.book << "\n" << "Date: " << now;
     }
     return out;
 }
@@ -47,7 +48,7 @@ bool LibraryManager::check_lending(Customer c, Books b) {
 
 void LibraryManager::Get_back() {
     Date now;
-    lended = false;
+    got_back = now;
     get_back = true;
     cout << "Transaction saved successfully.\n";
     if (now > return_date) {
@@ -76,6 +77,11 @@ void LibraryManager::reserve_save(Books b, Customer c) {
 
 void LibraryManager::print_user_transaction(Customer c) {
     if (c.get_usrnum() == this->customer.get_usrnum() && lended) {
-        cout << this << endl;
+        cout << *this << endl;
     }
+}
+
+void LibraryManager::print_user_current_transaction(Customer c) {
+    if (c.get_usrnum() == this->customer.get_usrnum() && lended && !get_back)
+        cout << *this << endl;
 }

@@ -36,6 +36,8 @@ public:
 
     bool check_pass(char p[12]);
 
+    void print_name();
+
 };
 
 

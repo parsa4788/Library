@@ -87,7 +87,9 @@ bool user_get_through(int num, char pass[12]) {
         cout << "Password and username do not match.\n";
         return false;
     } else {
-        cout << "Your Successfully logged in.\n";
+        cout << "Welcome ";
+        customer.print_name();
+        cout << "\n You're successfully logged in.\n";
         return true;
     }
 
@@ -466,7 +468,7 @@ void sub_menu_5() {
 
 void sub_menu_6() {
     int choice, num;
-    size_t pos;
+    size_t pos, pos1;
     Customer customer;
     Books book;
     fstream f, bf;
@@ -574,7 +576,7 @@ void sub_menu_6() {
                     cout << "This book is not lended to anyone.\n";
                     return;
                 }
-                f.open("LibraryManager.dat", ios::in | ios::binary | ios::app);
+                f.open("LibraryManager.dat", ios::in | ios::binary | ios::out);
                 if (!f.is_open()) {
                     cout << "Error opening file.\n";
                     return;
@@ -584,12 +586,14 @@ void sub_menu_6() {
                     cout << "Error reading file.\n";
                     return;
                 }
+                pos1 = sizeof(l);
                 while (!f.eof()) {
                     if (l.check_lending(customer, book)) {
                         check = true;
                         break;
                     }
                     f.read((char *) &l, sizeof l);
+                    pos1 += sizeof l;
                 }
                 if (!check) {
                     cout << "This book is lended to another memebr.\n";
@@ -597,11 +601,13 @@ void sub_menu_6() {
                     f.close();
                     return;
                 }
+                pos1 -= sizeof l;
                 book.get_back();
                 bf.seekp(pos, ios::beg);
                 bf.write((char *) &book, sizeof(Books));
                 bf.close();
                 l.Get_back();
+                f.seekp(pos1, ios::beg);
                 f.write((char *) &l, sizeof l);
                 f.close();
                 break;
@@ -733,10 +739,30 @@ void sub_menu_7() {
 }
 
 void Admin_menu() {
+    int i = 1;
     bool check;
     char choice, c;
+    string usrnm, pass;
     Books book;
     fstream f;
+    cout << "PLease enter username and password.\n";
+    cout << "Enter username:\n";
+    cin >> usrnm;
+    cout << "Please enter password:\n";
+    cin >> pass;
+    while (pass != "admin183485" && usrnm != "library1404" && i < 3) {
+        cout << "Username and password do not match. Please try again.\n";
+        cout << "Enter username:\n";
+        cin >> usrnm;
+        cout << "Please enter password.\n";
+        cin >> pass;
+        i++;
+    }
+    if (i == 3) {
+        cout << "Too many attempts please try again later.\n";
+        return;
+    }
+    cout << "Welcome Admin.\nYou're successfully logged in.\n";
     while (true) {
         cout << "1. Show/look for books in library.\n";
         cout << "2. Add new book.\n";
@@ -793,7 +819,7 @@ void Admin_menu() {
                     f.read((char *) &book, sizeof(Books));
                 }
                 f.close();
-                cout << "----------------\n";
+                cout << "------------------------\n";
                 break;
             case '5':
                 sub_menu_5();
@@ -856,7 +882,7 @@ void Member_menu() {
         cout << "2. Get book.\n";
         cout << "3. Tamdid.\n";
         cout << "4. Show loaned books.\n";
-        cout << "5. Show your loaned books.\n";
+        cout << "5. Show currently loaned books.\n";
         cout << "6. Reserve book.\n";
         cout << "0. Log out.\n";
         cin >> choice;
@@ -908,12 +934,20 @@ void Member_menu() {
             case 3:
                 break;
             case 4:
+                f.open("LibraryManager.dat", ios::in | ios::binary);
+                f.read((char *) &l, sizeof(l));
+                while (!f.eof()) {
+                    l.print_user_transaction(customer);
+                    f.read((char *) &l, sizeof(l));
+                }
+                f.close();
+                cout << "------------------------\n";
                 break;
             case 5:
                 f.open("LibraryManager.dat", ios::in | ios::binary);
                 f.read((char *) &l, sizeof(l));
                 while (!f.eof()) {
-                    l.print_user_transaction(customer);
+                    l.print_user_current_transaction(customer);
                     f.read((char *) &l, sizeof(l));
                 }
                 f.close();

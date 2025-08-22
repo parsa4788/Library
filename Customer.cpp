@@ -90,3 +90,7 @@ bool Customer::check_pass(char pass[12]) {
     else
         return false;
 }
+
+void Customer::print_name() {
+    cout << name << " " << family;
+}
