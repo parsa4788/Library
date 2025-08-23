@@ -40,6 +40,8 @@ public:
 
     void print_user_current_transaction(Customer c);
 
+    bool customer_reserve(Books b);
+
 };
 
 

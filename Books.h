@@ -49,6 +49,8 @@ public:
 
     int get_borrow_num();
 
+    bool is_reserved();
+
 private:
     char name[31], authors[5][21], isbn[14];
     int author_number, book_number, borrowed_number;

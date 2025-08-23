@@ -128,7 +128,6 @@ void Books::Edit() {
 void Books::Lend() {
     lend = true;
     borrowed_number++;
-    return;
 }
 
 bool Books::is_lended() {
@@ -141,6 +140,7 @@ int Books::get_booknum() {
 
 void Books::get_back() {
     lend = false;
+    reserve = false;
 }
 
 void Books::book_reserve() {
@@ -149,4 +149,8 @@ void Books::book_reserve() {
 
 int Books::get_borrow_num() {
     return borrowed_number;
+}
+
+bool Books::is_reserved() {
+    return reserve;
 }

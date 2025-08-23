@@ -85,3 +85,10 @@ void LibraryManager::print_user_current_transaction(Customer c) {
     if (c.get_usrnum() == this->customer.get_usrnum() && lended && !get_back)
         cout << *this << endl;
 }
+
+bool LibraryManager::customer_reserve(Books b) {
+    if (b.get_booknum() == this->book.get_booknum() && reserve)
+        return true;
+    else
+        return false;
+}

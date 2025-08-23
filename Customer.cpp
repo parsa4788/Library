@@ -27,7 +27,7 @@ istream &operator>>(istream &in, Customer &c) {
 
 ostream &operator<<(ostream &out, Customer &c) {
     out << c.name << ' ' << c.family << '\t' << c.father << '\t' << c.dob << '\t' << c.user_num << '\t'
-        << c.Phone_number << endl;
+        << c.Phone_number << '\t' << "borrow number: " << c.borrow_num;
     return out;
 }
 
@@ -93,4 +93,8 @@ bool Customer::check_pass(char pass[12]) {
 
 void Customer::print_name() {
     cout << name << " " << family;
+}
+
+void Customer::Lend() {
+    borrow_num++;
 }
